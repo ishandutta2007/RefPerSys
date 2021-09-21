@@ -2197,10 +2197,19 @@ Rps_Dumper::write_all_generated_files(void)
                     << _f.refpersysv << " with " << _f.dumpdirnamev << " & " << _f.tempsuffixv
                     << std::endl
                     << Rps_ShowCallFrame(&_));
+      RPS_DEBUG_LOG(GENCOD, "Rps_Dumper::write_all_generated_files before sending "<< _f.gencodselob << " to "
+                    << _f.refpersysv << " with " << _f.dumpdirnamev << " & " << _f.tempsuffixv
+                    << std::endl
+                    << Rps_ShowCallFrame(&_));
       Rps_TwoValues two = _f.refpersysv.send2(&_, _f.gencodselob, _f.dumpdirnamev, _f.tempsuffixv);
       _f.mainv = two.main();
       _f.xtrav  = two.xtra();
       RPS_DEBUG_LOG(DUMP, "Rps_Dumper::write_all_generated_files after sending "<< _f.gencodselob << " to "
+                    << _f.refpersysv << " with " << _f.dumpdirnamev << " & " << _f.tempsuffixv
+                    << std::endl << " --> mainv=" << _f.mainv << " & xtrav=" << _f.xtrav
+                    << std::endl
+                    << Rps_ShowCallFrame(&_));
+      RPS_DEBUG_LOG(GENCOD, "Rps_Dumper::write_all_generated_files after sending "<< _f.gencodselob << " to "
                     << _f.refpersysv << " with " << _f.dumpdirnamev << " & " << _f.tempsuffixv
                     << std::endl << " --> mainv=" << _f.mainv << " & xtrav=" << _f.xtrav
                     << std::endl
