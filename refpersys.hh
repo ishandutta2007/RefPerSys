@@ -394,7 +394,7 @@ extern "C" void rps_set_debug(const std::string &deblev);
   dbgmacro(CMD)                     \
   dbgmacro(DUMP)                    \
   dbgmacro(GARBAGE_COLLECTOR)       \
-  dbgmacro(GENERATED_CODE)          \
+  dbgmacro(GENCOD)                  \
   dbgmacro(WEB)                     \
   dbgmacro(LOAD)                    \
   dbgmacro(LOWREP)                  \
