@@ -1,4 +1,4 @@
-//: GENERATED file generated/rps-names.hh / DO NOT EDIT!
+//: GENERATED file generated/rpsc-names.h / DO NOT EDIT!
 //: This file is part of the Reflective Persistent System.
 //:  © Copyright 2019 - 2021 The Reflective Persistent System Team.
 //:  see refpersys.org and contact team@refpersys.org for more.
@@ -15,6 +15,8 @@
 //: _
 //: You should have received a copy of the GNU General Public License
 //: along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+/// generated from store_rps.cc:2071
 
 #ifndef RPS_INSTALL_NAMED_ROOT_OB
 #error RPS_INSTALL_NAMED_ROOT_OB(Oid,Name) macro undefined
@@ -54,4 +56,4 @@ RPS_INSTALL_NAMED_ROOT_OB(_9uwZtDshW4401x6MsY,space)
 #define RPS_NB_NAMED_ROOT_OB 29
 
 #undef RPS_INSTALL_NAMED_ROOT_OB
-/// end of RefPerSys names file generated/rps-names.hh
+/// end of RefPerSys C names file generated/rpsc-names.h

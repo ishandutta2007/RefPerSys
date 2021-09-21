@@ -38,9 +38,12 @@ Some draft design ideas are written in the [RefPerSys design
 draft](http://starynkevitch.net/Basile/refpersys-design.pdf) which is
 very incomplete **work in progress**.
 
+
+## funding and partners needed
+
 If you happen to know about any research call for proposals or funding
 opportunities in Europe (Euro zone) about this (e.g. related to
-[artificial general
+0[artificial general
 intelligence](https://en.wikipedia.org/wiki/Artificial_general_intelligence)
 goals) please mention them to [Basile
 Starynkevitch](http://starynkevitch.net/Basile/) (France) by email to
@@ -104,6 +107,11 @@ tasklet should conceptually run quickly (in a few milliseconds) and is
 allowed to add or remove runnable tasklets (including itself) to the
 agenda. Each worker thread is looping: fetching a runnable tasklet
 from the agenda, then running that tasklet.
+
+### the C-rewrite branch
+
+It will contain more generated code, and we eventually want all the
+generated code to be in C99, not C++11
 
 ## License and copyright
 
