@@ -1696,6 +1696,7 @@ rps_read_eval_print_loop(int &argc, char **argv)
       const Rps_LexTokenZone* lextokz = _f.lextokv.as_lextoken();
       RPS_ASSERT(lextokz);
       _f.lexval = lextokz->lxval();
+      _f.cmdob = nullptr;
       RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop got lextokv=" << _f.lextokv << " of val " << _f.lexval);
       if (lextokz->lxkind()
           == RPS_ROOT_OB(_36I1BY2NetN03WjrOv)) //symbol∈class
@@ -1705,20 +1706,28 @@ rps_read_eval_print_loop(int &argc, char **argv)
                       << "got symbol-kinded token"
                       << _f.lextokv << " of kind " << lextokz->lxkind()
                       << " and value " << _f.lexval);
+	  if (_f.lexval.is_string()) {
+	    std::string cmdname = _f.lexval.as_string()->cppstring();
+	    RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop got lextokv=" << _f.lextokv << " cmdname:" << cmdname);
+	    /* TODO: fetch the cmdob using the _5dkRQtwGUHs02MVQT0
+	       "repl_command_dict"∈string_dictionary */
 #warning incomplete code at rps_read_eval_print_loop for symbol
+	  }
         }
       else if (lextokz->lxkind()
-               != RPS_ROOT_OB(_5yhJGgxLwLp00X0xEQ))  //object∈class
+               == RPS_ROOT_OB(_5yhJGgxLwLp00X0xEQ))  //object∈class
         {
           RPS_WARNOUT("rps_read_eval_print_loop command at "
                       << commandpos << std::endl
-                      << "Should start with an object but got "
+                      << " start with an object and got "
                       << _f.lextokv << " of kind " << lextokz->lxkind()
                       << " and value " << _f.lexval);
+	  RPS_ASSERT(_f.lexval.is_object());
+	  _f.cmdob = _f.lexval.as_object();
+	  /* TODO: get the cmdob from that object?*/
+#warning incomplete code at rps_read_eval_print_loop for object
           continue;
         }
-      RPS_ASSERT(_f.lexval.is_object());
-      _f.cmdob = _f.lexval.as_object();
       RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop cmdob=" << _f.cmdob
                     << " at " << commandpos);
       if (_f.lexval.is_instance_of(&_,RPS_ROOT_OB(_8CncrUdoSL303T5lOK)))   //repl_command∈class
