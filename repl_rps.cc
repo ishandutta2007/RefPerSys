@@ -1779,14 +1779,19 @@ rps_do_repl_commands_vec(const std::vector<std::string>&cmdvec)
                            Rps_Value lextokv;
                            Rps_Value lexval;
                            Rps_ObjectRef cmdob;
+                           Rps_ObjectRef repldictob;
                            Rps_Value cmdparserv;
                            Rps_Value parsmainv;
+                           Rps_Value cmdv;
                            Rps_Value parsextrav;
                 );
   RPS_ASSERT(rps_is_main_thread());
   int nbcmd = (int) (cmdvec.size());
   std::string cmdstr;
   unsigned int cmdsiz = 0;
+  _f.repldictob = RPS_ROOT_OB(_5dkRQtwGUHs02MVQT0); //"repl_command_dict"∈string_dictionary)
+  Rps_PayloadStringDict* pycmdict = _f.repldictob->get_dynamic_payload<Rps_PayloadStringDict>();
+  RPS_ASSERT(pycmdict);
   for (int cix=0; cix<nbcmd; cix++)
     {
       RPS_DEBUG_LOG(REPL, "REPL command [" << cix << "]: " << cmdvec[cix]);
@@ -1825,18 +1830,34 @@ rps_do_repl_commands_vec(const std::vector<std::string>&cmdvec)
                  ==RPS_ROOT_OB(_36I1BY2NetN03WjrOv) //symbol∈class
                 )
           {
-            asm ("nop"); // Temporary Kludge
+            asm volatile ("nop"); // Temporary kludge, to enable a breakpoint here
             _f.lexval = lextokz->lxval();
             RPS_DEBUG_LOG(REPL, "rps_do_repl_commands_vec symbol token " << _f.lextokv << " of value " << _f.lexval
                           << " at " << commandpos);
             if (_f.lexval.is_string() && !_f.cmdob)
               _f.cmdob = Rps_PayloadSymbol::find_named_object(_f.lexval.as_string()->cppstring());
 #warning unimplemented symbol token rps_do_repl_commands_vec
-            RPS_WARNOUT("unimplemented symbol token rps_do_repl_commands_vec lextok="
-                        << _f.lextokv << " (of value:" << _f.lexval << ")"
-                        << " cmdob=" << _f.cmdob
-                        << std::endl
-                        << RPS_FULL_BACKTRACE_HERE(1, "rps_do_repl_commands_vec/symbol"));
+            RPS_DEBUG_LOG(REPL, "symbol token rps_do_repl_commands_vec lextok="
+                          << _f.lextokv << " (of value:" << _f.lexval << ")"
+                          << " cmdob=" << _f.cmdob
+                          << std::endl
+                          << RPS_FULL_BACKTRACE_HERE(1, "rps_do_repl_commands_vec/symbol"));
+            if (!_f.cmdob)
+              {
+                _f.cmdv = pycmdict->find(_f.lexval.as_string()->cppstring());
+                RPS_DEBUG_LOG(REPL, "symbol token rps_do_repl_commands_vec lextok="
+                              << _f.lextokv << " (of value:" << _f.lexval << ")"
+                              << " cmdv=" << _f.cmdv
+                              << std::endl
+                              << RPS_FULL_BACKTRACE_HERE(1, "rps_do_repl_commands_vec/cmdict"));
+                if (_f.cmdv.is_object())
+                  _f.cmdob = _f.cmdv.as_object();
+                else
+                  RPS_WARNOUT("invalid REPL command for " << _f.lexval << " got cmdv=" << _f.cmdv
+                              << " for token " << _f.lextokv << " with REPL dict " <<  _f.repldictob
+                              << std::endl
+                              << RPS_FULL_BACKTRACE_HERE(1, "rps_do_repl_commands_vec/badcmd"));
+              }
           }
         else
           {
