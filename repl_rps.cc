@@ -1724,7 +1724,8 @@ rps_read_eval_print_loop(int &argc, char **argv)
                             << " cmdv=" << _f.cmdv
                             << std::endl
                             << RPS_FULL_BACKTRACE_HERE(1, "rps_read_eval_print_loop/cmdict"));
-#warning incomplete code at rps_read_eval_print_loop for symbol
+              RPS_ASSERT(_f.cmdv.is_object());
+              _f.cmdob = _f.cmdv.as_object();
             }
         }
       else if (lextokz->lxkind()
