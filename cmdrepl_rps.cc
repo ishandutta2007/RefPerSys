@@ -339,8 +339,8 @@ Rps_TwoValues
 rpsapply_28DGtmXCyOX02AuPLd(Rps_CallFrame*callerframe,
                             const Rps_Value arg0,
                             const Rps_Value arg1,
-                            [[maybe_unused]] const Rps_Value arg2,
-                            [[maybe_unused]] const Rps_Value arg3,
+                            const Rps_Value arg2,
+                            const Rps_Value arg3,
                             [[maybe_unused]] const std::vector<Rps_Value>* restargs)
 {
   static Rps_Id descoid;
@@ -352,6 +352,10 @@ rpsapply_28DGtmXCyOX02AuPLd(Rps_CallFrame*callerframe,
                 << "∈" << arg0.compute_class(&_)
                 << " arg1=" << arg1
                 << "∈" << arg1.compute_class(&_) << std::endl
+                << " arg2=" << arg1
+                << "∈" << arg2.compute_class(&_) << std::endl
+                << " arg3=" << arg1
+                << "∈" << arg2.compute_class(&_) << std::endl
                 << " from " << std::endl
                 << Rps_ShowCallFrame(&_));
 #warning incomplete rpsapply_28DGtmXCyOX02AuPLd for REPL command put
