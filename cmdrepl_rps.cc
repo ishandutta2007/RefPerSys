@@ -269,12 +269,12 @@ rpsapply_2TZNwgyOdVd001uasl(Rps_CallFrame*callerframe,
   static Rps_Id descoid;
   if (!descoid) descoid=Rps_Id("_2TZNwgyOdVd001uasl");
   RPS_LOCALFRAME(/*descr:*/Rps_ObjectRef::really_find_object_by_oid(descoid),
-		 callerframe,
-		 Rps_ObjectRef obcmdict;
-		 Rps_ObjectRef obcurcmd;
-		 Rps_ObjectRef obhelp;
-		 Rps_Value helpv;
-		 );
+                           callerframe,
+                           Rps_ObjectRef obcmdict;
+                           Rps_ObjectRef obcurcmd;
+                           Rps_ObjectRef obhelp;
+                           Rps_Value helpv;
+                );
   RPS_DEBUG_LOG(CMD, "REPL command help start arg0=" << arg0
                 << "∈" << arg0.compute_class(&_)
                 << " arg1=" << arg1
@@ -286,11 +286,12 @@ rpsapply_2TZNwgyOdVd001uasl(Rps_CallFrame*callerframe,
     if (!helpid)
       helpid = Rps_Id("_7Zk6KbX2cnw035YU2E");
     _f.obhelp = Rps_ObjectRef::find_object_or_null_by_oid(&_, helpid);
-    if (!_f.obhelp) {
-      RPS_WARNOUT("cannot find `help` object of id _7Zk6KbX2cnw035YU2E for help command" << std::endl
-		  << RPS_FULL_BACKTRACE_HERE(1, "rpsapply_2TZNwgyOdVd001uasl/command help"));
-      return {nullptr, nullptr};
-    }
+    if (!_f.obhelp)
+      {
+        RPS_WARNOUT("cannot find `help` object of id _7Zk6KbX2cnw035YU2E for help command" << std::endl
+                    << RPS_FULL_BACKTRACE_HERE(1, "rpsapply_2TZNwgyOdVd001uasl/command help"));
+        return {nullptr, nullptr};
+      }
   }
   _f.obcmdict = RPS_ROOT_OB(_5dkRQtwGUHs02MVQT0); //"repl_command_dict"∈string_dictionary
   std::lock_guard<std::recursive_mutex> guobcmdict(*(_f.obcmdict->objmtxptr()));
@@ -298,31 +299,34 @@ rpsapply_2TZNwgyOdVd001uasl(Rps_CallFrame*callerframe,
   RPS_ASSERT(pycmdict);
   RPS_INFORMOUT(std::endl << "**** possible REPL commands are:");
   pycmdict->iterate_with_callframe(&_,
-				   [&](Rps_CallFrame*callerframe,
-				       const std::string& namecmd, const Rps_Value valcmd) {
-				     if (valcmd.is_object()) {
-				       _f.obcurcmd = valcmd.as_object();
-				       _f.helpv = _f.obcurcmd->get_attr1(callerframe, _f.obhelp);
-				       if (_f.helpv.is_string()) {
-					 std::cout << " \342\226\243 " // ▣ U+25A3 WHITE SQUARE CONTAINING BLACK SMALL SQUARE
-						   << namecmd << " : "
-						   << _f.helpv.to_string()->cppstring();
-				       }
-				       else
-					 std::cout << " \342\227\215 "  // ◍ U+25CD CIRCLE WITH VERTICAL FILL
-						   << namecmd;
-				       std::cout << std::endl;
-				       return false; // to continue iteration
-				     }
-				     else
-				       {
-					 RPS_WARNOUT("corrupted REPL command dictionnary "
-						     << _f.obcmdict << " has unexpected valcmd="
-						     << valcmd
-						     << " for command name " << namecmd);
-					 return true; // to stop iteration
-				       }
-				   });
+                                   [&](Rps_CallFrame*callerframe,
+                                       const std::string& namecmd, const Rps_Value valcmd)
+  {
+    if (valcmd.is_object())
+      {
+        _f.obcurcmd = valcmd.as_object();
+        _f.helpv = _f.obcurcmd->get_attr1(callerframe, _f.obhelp);
+        if (_f.helpv.is_string())
+          {
+            std::cout << " \342\226\243 " // ▣ U+25A3 WHITE SQUARE CONTAINING BLACK SMALL SQUARE
+                      << namecmd << " : "
+                      << _f.helpv.to_string()->cppstring();
+          }
+        else
+          std::cout << " \342\227\215 "  // ◍ U+25CD CIRCLE WITH VERTICAL FILL
+                    << namecmd;
+        std::cout << std::endl;
+        return false; // to continue iteration
+      }
+    else
+      {
+        RPS_WARNOUT("corrupted REPL command dictionnary "
+                    << _f.obcmdict << " has unexpected valcmd="
+                    << valcmd
+                    << " for command name " << namecmd);
+        return true; // to stop iteration
+      }
+  });
   std::cout << std::endl;
   return {_f.obcmdict,nullptr};
 } //end of rpsapply_2TZNwgyOdVd001uasl for REPL command help

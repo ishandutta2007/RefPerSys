@@ -1726,12 +1726,10 @@ rps_read_eval_print_loop(int &argc, char **argv)
                       << " and value " << _f.lexval);
           RPS_ASSERT(_f.lexval.is_object());
           _f.cmdob = _f.lexval.as_object();
-          /* TODO: get the cmdob from that object?*/
-#warning incomplete code at rps_read_eval_print_loop for object
-          continue;
         }
       RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop cmdob=" << _f.cmdob
-                    << " at " << commandpos);
+                    << " at " << commandpos << " for lextokv=" << _f.lextokv
+                    << " and lexval=" << _f.lexval);
       if (_f.lexval.is_instance_of(&_,RPS_ROOT_OB(_8CncrUdoSL303T5lOK)))   //repl_command∈class
         {
           _f.cmdparserv = _f.cmdob
