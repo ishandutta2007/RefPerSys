@@ -1660,7 +1660,9 @@ rps_read_eval_print_loop(int &argc, char **argv)
                            /*callerframe:*/nullptr,
                            Rps_Value lextokv;
                            Rps_Value lexval;
+                           Rps_Value cmdv;
                            Rps_ObjectRef cmdob;
+                           Rps_ObjectRef repldictob;
                            Rps_Value cmdparserv;
                            Rps_Value parsmainv;
                            Rps_Value parsextrav;
@@ -1672,6 +1674,9 @@ rps_read_eval_print_loop(int &argc, char **argv)
   int count=0;
   rl_attempted_completion_function = rpsrepl_name_or_oid_completion;
   Rps_ReadlineTokenSource rltoksrc("_-_");
+  _f.repldictob = RPS_ROOT_OB(_5dkRQtwGUHs02MVQT0); //"repl_command_dict"∈string_dictionary)
+  Rps_PayloadStringDict* pycmdict = _f.repldictob->get_dynamic_payload<Rps_PayloadStringDict>();
+  RPS_ASSERT(pycmdict);
   while (!rps_repl_stopped)
     {
       char prompt[32];
@@ -1713,6 +1718,12 @@ rps_read_eval_print_loop(int &argc, char **argv)
               RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop got lextokv=" << _f.lextokv << " cmdname:" << cmdname);
               /* TODO: fetch the cmdob using the _5dkRQtwGUHs02MVQT0
                  "repl_command_dict"∈string_dictionary */
+              _f.cmdv = pycmdict->find(cmdname);
+              RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop got lextok="
+                            << _f.lextokv << " (of value:" << _f.lexval << ")"
+                            << " cmdv=" << _f.cmdv
+                            << std::endl
+                            << RPS_FULL_BACKTRACE_HERE(1, "rps_read_eval_print_loop/cmdict"));
 #warning incomplete code at rps_read_eval_print_loop for symbol
             }
         }
