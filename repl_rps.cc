@@ -229,7 +229,8 @@ std::ostream&
 operator << (std::ostream&out, const std::deque<Rps_Value>& dq)
 {
   int cnt=0;
-  out << "{|";
+  int siz=(int)dq.size();
+  out << "/" << siz << "{|";
   for (const Rps_Value v : dq)
     {
       if (cnt++ > 0) out << ", ";
