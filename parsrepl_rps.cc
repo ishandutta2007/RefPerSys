@@ -860,7 +860,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
   _f.lexvalv = ltokz->lxval();
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary lexkindob="
                 << _f.lexkindob << " lexval=" << _f.lexvalv << " position:" << position_str()
-                << " curcptr " << Rps_QuotedC_String(curcptr()));
+                << " curcptr " << Rps_QuotedC_String(curcptr())<< " token_deq:" << token_deq);
   if (_f.lexkindob == RPS_ROOT_OB(_2A2mrPpR3Qf03p6o5b) // int
       && _f.lexvalv.is_int())
     {
@@ -871,7 +871,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
 #warning Rps_TokenSource::parse_primary  buggy near here for REPL command show 1 * 2 + 3 * 4
       if (_f.lexgotokv)   ///@@@ very suspicious, probably wrong...
         {
-          RPS_DEBUG_LOG(CMD, "Rps_TokenSource::parse_primary tokenpush " << _f.lextokv);
+          RPS_DEBUG_LOG(CMD, "Rps_TokenSource::parse_primary tokenpush " << _f.lextokv << " into token_deq:" << token_deq);
           token_deq.push_back(_f.lexgotokv);
         }
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary int " << _f.lexvalv
@@ -882,6 +882,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
                     << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary int"));
       if (pokparse)
         *pokparse = true;
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary gives int " << _f.lexvalv << " token_deq:" << token_deq);
       return _f.lexvalv;
     }
   else if (_f.lexkindob == RPS_ROOT_OB(_62LTwxwKpQ802SsmjE) //string∈class
