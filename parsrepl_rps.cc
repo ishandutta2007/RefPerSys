@@ -838,6 +838,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
                            Rps_Value lextokv;
                            Rps_Value lexgotokv;
                            Rps_ObjectRef lexkindob;
+                           Rps_ObjectRef symbob;
                            Rps_Value lexvalv;
                 );
   std::string startpos = position_str();
@@ -904,15 +905,37 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
       return _f.lexvalv;
     }
   else if (_f.lexkindob == RPS_ROOT_OB(_36I1BY2NetN03WjrOv) //symbol∈class
-	   ) {
-      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary symbol " << _f.lexvalv << " lexgotokv:" << _f.lexgotokv
+          )
+    {
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary symbol lexval:" << _f.lexvalv << " lexgotokv:" << _f.lexgotokv
                     << " token_deq:" << token_deq
                     << " at " << position_str());
+      if (_f.lexvalv.is_string())
+        {
+          std::string symbstr = _f.lexvalv.to_cppstring();
+          _f.symbob = Rps_PayloadSymbol::find_named_object(symbstr);
+          RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary symbol lexval:" << _f.lexvalv << " lexgotokv:" << _f.lexgotokv
+                        << " token_deq:" << token_deq
+                        << " symbob=" << _f.symbob
+                        << " at " << position_str());
+          if (!_f.symbob)
+            {
+              RPS_WARNOUT("no symbol named " << symbstr
+                          << " in " << _f.lexgotokv << " at " << position_str());
+              if (pokparse)
+                *pokparse = false;
+              return nullptr;
+            }
+          else
+            {
+              return _f.lexvalv;
+            }
+        }
       RPS_WARNOUT("unimplemented symbol token "
-		  << _f.lexgotokv
-		  << " in Rps_TokenSource::parse_primary" << std::endl
-		  << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/symbol"));
-  }
+                  << _f.lexgotokv
+                  << " in Rps_TokenSource::parse_primary" << std::endl
+                  << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/symbol"));
+    }
 #warning unimplemented Rps_TokenSource::parse_primary
   /** TODO:
    * we probably want to code some recursive descent parser for REPL,
