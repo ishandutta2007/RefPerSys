@@ -903,6 +903,16 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
                     << " at " << position_str());
       return _f.lexvalv;
     }
+  else if (_f.lexkindob == RPS_ROOT_OB(_36I1BY2NetN03WjrOv) //symbol∈class
+	   ) {
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary symbol " << _f.lexvalv << " lexgotokv:" << _f.lexgotokv
+                    << " token_deq:" << token_deq
+                    << " at " << position_str());
+      RPS_WARNOUT("unimplemented symbol token "
+		  << _f.lexgotokv
+		  << " in Rps_TokenSource::parse_primary" << std::endl
+		  << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/symbol"));
+  }
 #warning unimplemented Rps_TokenSource::parse_primary
   /** TODO:
    * we probably want to code some recursive descent parser for REPL,
