@@ -954,6 +954,22 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
                     << " in Rps_TokenSource::parse_primary token_deq:" << token_deq<< std::endl
                     << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/symbol"));
     }
+  else if (_f.lexkindob == RPS_ROOT_OB(_5yhJGgxLwLp00X0xEQ) //object∈class
+          )
+    {
+      RPS_WARNOUT("unimplemented token kind " << _f.lexkindob
+                  << " for token "  << _f.lexgotokv
+                  << " lexval:" << _f.lexvalv
+                  << " in Rps_TokenSource::parse_primary token_deq:" << token_deq<< std::endl
+                  << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/object"));
+    }
+  else
+    RPS_WARNOUT("unexpected token kind " << _f.lexkindob
+                << " for token "
+                << _f.lexgotokv
+                << " lexval:" << _f.lexvalv
+                << " in Rps_TokenSource::parse_primary token_deq:" << token_deq<< std::endl
+                << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/unexpected"));
 #warning unimplemented Rps_TokenSource::parse_primary
   /** TODO:
    * we probably want to code some recursive descent parser for REPL,
