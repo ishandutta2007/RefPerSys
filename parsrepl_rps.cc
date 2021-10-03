@@ -843,6 +843,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
                            Rps_Value lexgotokv;
                            Rps_ObjectRef lexkindob;
                            Rps_ObjectRef symbob;
+                           Rps_ObjectRef replob;
                            Rps_Value lexvalv;
                 );
   std::string startpos = position_str();
@@ -957,7 +958,18 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
   else if (_f.lexkindob == RPS_ROOT_OB(_5yhJGgxLwLp00X0xEQ) //object∈class
           )
     {
-      RPS_WARNOUT("unimplemented token kind " << _f.lexkindob
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object token " << _f.lexgotokv
+                    << " lexval:" << _f.lexvalv
+                    << " in Rps_TokenSource::parse_primary token_deq:" << token_deq<< std::endl
+                    << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_primary/object"));
+      if (_f.lexvalv.is_object())
+        {
+          if (pokparse)
+            *pokparse = true;
+	  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv);
+          return _f.lexvalv;
+        }
+      RPS_WARNOUT("unimplemented object token kind " << _f.lexkindob
                   << " for token "  << _f.lexgotokv
                   << " lexval:" << _f.lexvalv
                   << " in Rps_TokenSource::parse_primary token_deq:" << token_deq<< std::endl
