@@ -364,7 +364,7 @@ Rps_TokenSource::parse_conjunction(Rps_CallFrame*callframe, std::deque<Rps_Value
   while (again);
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction andbinopob=" << _f.andbinopob
                 << "nbconj:" << conjvect.size() << " at " << startpos
-		<< " conjvect:" << conjvect);
+                << " conjvect:" << conjvect);
   if (conjvect.size() > 1)
     {
       /// we make an instance:
@@ -439,7 +439,8 @@ Rps_TokenSource::parse_comparison(Rps_CallFrame*callframe, std::deque<Rps_Value>
       return nullptr;
     }
   _f.lextokv =  lookahead_token(&_, token_deq, 0);
-  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison after left lextok=" << _f.lextokv << " pos:" << position_str());
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison after left lextok=" << _f.lextokv << " pos:" << position_str()
+                << " token_deq:" << token_deq);
   if (!_f.lextokv)
     {
       if (pokparse)
@@ -496,7 +497,7 @@ Rps_TokenSource::parse_comparand(Rps_CallFrame*callframe, std::deque<Rps_Value>&
   if (!_f.lexopertokv)
     {
       if (pokparse)
-	*pokparse = true;
+        *pokparse = true;
       return _f.leftv;
     }
 #warning unimplemented Rps_TokenSource::parse_comparand
@@ -823,11 +824,12 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
           break;
         };
     } // end while (again)
-  if (operandvect.size() == 1) {
-    if (pokparse)
-      *pokparse = true;
-    return operandvect[0];
-  }
+  if (operandvect.size() == 1)
+    {
+      if (pokparse)
+        *pokparse = true;
+      return operandvect[0];
+    }
 #warning unimplemented Rps_TokenSource::parse_term
   /* we probably should make a term with operandvect here ... */
   RPS_FATALOUT("missing code in Rps_TokenSource::parse_term from " << Rps_ShowCallFrame(callframe)
@@ -978,7 +980,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
         {
           if (pokparse)
             *pokparse = true;
-	  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv);
+          RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv);
           return _f.lexvalv;
         }
       RPS_WARNOUT("unimplemented object token kind " << _f.lexkindob
