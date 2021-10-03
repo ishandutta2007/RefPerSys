@@ -363,7 +363,8 @@ Rps_TokenSource::parse_conjunction(Rps_CallFrame*callframe, std::deque<Rps_Value
     }
   while (again);
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction andbinopob=" << _f.andbinopob
-                << "nbconj:" << conjvect.size() << " at " << startpos);
+                << "nbconj:" << conjvect.size() << " at " << startpos
+		<< " conjvect:" << conjvect);
   if (conjvect.size() > 1)
     {
       /// we make an instance:
@@ -492,6 +493,12 @@ Rps_TokenSource::parse_comparand(Rps_CallFrame*callframe, std::deque<Rps_Value>&
                 << " startpos:" << startpos
                 << " currentpos:" << position_str()
                 << " curcptr " << Rps_QuotedC_String(curcptr()) << " token_deq:" << token_deq);
+  if (!_f.lexopertokv)
+    {
+      if (pokparse)
+	*pokparse = true;
+      return _f.leftv;
+    }
 #warning unimplemented Rps_TokenSource::parse_comparand
   /***
    * we probably should loop and collect all terms if they are separated by the same additive operator
@@ -816,6 +823,11 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
           break;
         };
     } // end while (again)
+  if (operandvect.size() == 1) {
+    if (pokparse)
+      *pokparse = true;
+    return operandvect[0];
+  }
 #warning unimplemented Rps_TokenSource::parse_term
   /* we probably should make a term with operandvect here ... */
   RPS_FATALOUT("missing code in Rps_TokenSource::parse_term from " << Rps_ShowCallFrame(callframe)
