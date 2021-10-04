@@ -100,7 +100,7 @@ rpsapply_61pgHb5KRq600RLnKD(Rps_CallFrame*callerframe,
   {
     Rps_TokenSource*tksrc = ltokz->lxsrc();
     RPS_ASSERT (tksrc != nullptr);
-    _f.nextokv = tksrc->get_token(&_);
+    _f.nextokv = RPS_GET_TOKEN(*tksrc,&_);
     RPS_DEBUG_LOG(CMD, "REPL command dump callcnt#" << callcnt << " lexval=" << _f.lexval << " nextokv=" << _f.nextokv
                   << " framedepth=" << _.call_frame_depth());
     const Rps_LexTokenZone* nextokz = _f.nextokv.to_lextoken();
@@ -233,7 +233,7 @@ rpsapply_7WsQyJK6lty02uz5KT(Rps_CallFrame*callerframe,
     showpos = tksrc->position_str();
     RPS_DEBUG_LOG(CMD, "REPL command show lextokv=" << _f.lextokv << " framedepth:"<< _.call_frame_depth()
                   << " before parse_expression");
-    _f.lextokv = tksrc->get_token(&_);
+    _f.lextokv = RPS_GET_TOKEN(*tksrc,&_);
     RPS_DEBUG_LOG(CMD, "REPL command show got lextokv=" << _f.lextokv
                   << " from " << RPS_FULL_BACKTRACE_HERE(1, "REPL command show rpsapply_7WsQyJK6lty02uz5KT/gotnext"));
     if (_f.lextokv)

@@ -243,7 +243,7 @@ Rps_StringTokenSource::get_line()
 
 ////////////////
 Rps_LexTokenValue
-Rps_TokenSource::get_token(Rps_CallFrame*callframe)
+Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
 {
   RPS_ASSERT(callframe==nullptr || callframe->is_good_call_frame());
   RPS_LOCALFRAME(/*descr:*/RPS_ROOT_OB(_0S6DQvp3Gop015zXhL), //lexical_token∈class
@@ -258,9 +258,9 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe)
                 );
   const char* curp = curcptr();
   if (curp)
-    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start curp='" << Rps_Cjson_String(curp) << "' at " << position_str());
+    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start curp='" << Rps_Cjson_String(curp) << "' at " << position_str() << " from " << (file?file:"???") << ":" << lineno);
   else
-    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start no curp at " << position_str());
+    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start no curp at " << position_str()<< " from " << (file?file:"???") << ":" << lineno);
 
   ucs4_t curuc=0;
   int ulen= -1;
@@ -1208,7 +1208,7 @@ rps_repl_lexer_test(void)
       rltoksrc.set_prompt(prompt);
       do
         {
-          _f.curlextokenv = rltoksrc.get_token(&_);
+          _f.curlextokenv = RPS_GET_TOKEN(rltoksrc,&_);
           if (_f.curlextokenv)
             {
               tokcnt++;

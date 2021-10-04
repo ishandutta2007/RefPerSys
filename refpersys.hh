@@ -2280,8 +2280,10 @@ public:
   int line(void) const { return toksrc_line; };
   int col(void) const { return toksrc_col; };
   /// on lexical error, get_token returns null and does not change the position
-  Rps_LexTokenValue get_token(Rps_CallFrame*callframe);
+  Rps_LexTokenValue get_token(Rps_CallFrame*callframe, const char*file=nullptr, int lineno=0);
 };				// end Rps_TokenSource
+
+#define RPS_GET_TOKEN(TokSrc,CallFrame) (TokSrc).get_token(CallFrame,__FILE__,__LINE__)
 
 class Rps_CinTokenSource : public Rps_TokenSource
 {
