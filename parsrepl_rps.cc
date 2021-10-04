@@ -423,7 +423,9 @@ Rps_TokenSource::parse_comparison(Rps_CallFrame*callframe, std::deque<Rps_Value>
   static Rps_Id id_greaterequal_binop;
   if (!id_greaterequal_binop)
     id_greaterequal_binop = Rps_Id("_8p431uwpLJI00r5FQD");
-  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison startpos:" << startpos);
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison before left comparand startpos:"
+		<< startpos << " pos:" << position_str()
+		    << std::endl << "... token_deq:" << token_deq);
   bool okleft = false;
   _f.leftv = parse_comparand(&_, token_deq, &okleft);
   if (okleft)
