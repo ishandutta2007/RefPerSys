@@ -428,18 +428,22 @@ Rps_TokenSource::parse_comparison(Rps_CallFrame*callframe, std::deque<Rps_Value>
   _f.leftv = parse_comparand(&_, token_deq, &okleft);
   if (okleft)
     {
-      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison leftv=" << _f.leftv << " startpos:" << startpos << " token_deq:" << token_deq);
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison leftv=" << _f.leftv
+		    << " startpos:" << startpos << " pos:" << position_str()
+		    << std::endl << "... token_deq:" << token_deq);
     }
   else
     {
       RPS_WARNOUT("parse_comparison failed to parse left comparand at " << startpos
-                  << std::endl << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_comparison fail"));
+                  << std::endl
+		  << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_comparison fail"));
       if (pokparse)
         *pokparse = false;
       return nullptr;
     }
   _f.lextokv =  lookahead_token(&_, token_deq, 0);
-  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison after left lextok=" << _f.lextokv << " pos:" << position_str()
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_comparison after left lextok="
+		<< _f.lextokv << " pos:" << position_str()
                 << " token_deq:" << token_deq
                 << std::endl << " leftv=" << _f.leftv);
   if (!_f.lextokv)
@@ -450,7 +454,8 @@ Rps_TokenSource::parse_comparison(Rps_CallFrame*callframe, std::deque<Rps_Value>
     }
 #warning unimplemented Rps_TokenSource::parse_comparison
   RPS_FATALOUT("missing code in Rps_TokenSource::parse_comparison from " << Rps_ShowCallFrame(callframe)
-               << " with token_deq=" << token_deq << " at " << position_str());
+               << " with token_deq=" << token_deq << " at " << position_str()
+	       << " lextokv:" << _f.lextokv);
 } // end Rps_TokenSource::parse_comparison
 
 
@@ -888,12 +893,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary lexgotokv " << _f.lexgotokv
                     << " lexval " << _f.lexvalv
                     << " position:" << position_str() << " curcptr " << Rps_QuotedC_String(curcptr()) << " token_deq:" << token_deq);
-#warning Rps_TokenSource::parse_primary  buggy near here for REPL command show 1 * 2 + 3 * 4
-      if (_f.lexgotokv)   ///@@@ very suspicious, probably wrong...
-        {
-          RPS_DEBUG_LOG(CMD, "Rps_TokenSource::parse_primary tokenpush " << _f.lextokv << " into token_deq:" << token_deq);
-          token_deq.push_back(_f.lexgotokv);
-        }
+      RPS_ASSERT(_f.lexgotokv);
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary int " << _f.lexvalv
                     << " lextokv:" << _f.lextokv
                     << " lexgotokv:" << _f.lexgotokv
