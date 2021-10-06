@@ -845,6 +845,7 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
     {
       if (pokparse)
         *pokparse = true;
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term singleoperand result " << operandvect[0] << " token_deq:" << token_deq);
       return operandvect[0];
     }
 #warning unimplemented Rps_TokenSource::parse_term
@@ -993,7 +994,8 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
         {
           if (pokparse)
             *pokparse = true;
-          RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv);
+          RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv
+			<< " token_deq:" << token_deq);
           return _f.lexvalv;
         }
       RPS_WARNOUT("unimplemented object token kind " << _f.lexkindob
