@@ -72,9 +72,13 @@ Rps_TokenSource::parse_expression(Rps_CallFrame*callframe, std::deque<Rps_Value>
     {
       if (pokparse)
         *pokparse = false;
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_expression failing " << startpos);
       return nullptr;
     }
   _f.leftv = parse_disjunction(&_, token_deq, &ok);
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_expression left disjunction leftv=" << _f.leftv << ' '
+                << (ok?"left OK":"left BAD")
+                << " position:" << position_str() << " token_deq:" << token_deq);
   if (!ok)
     {
       if (pokparse)
@@ -89,10 +93,13 @@ Rps_TokenSource::parse_expression(Rps_CallFrame*callframe, std::deque<Rps_Value>
   static Rps_Id idoroper;
   if (!idoroper)
     idoroper = Rps_Id("_1ghZV0g1dtR02xPgqk"); // id of "or!binop"∈repl_binary_operator
+  int nbloop = 0;
   do
     {
+      nbloop++;
       again = false;
       _f.lextokv =  lookahead_token(&_, token_deq, 0);
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_expression after left lextokv=" << _f.lextokv << " token_deq:" << token_deq << " nbloop=" << nbloop);
       if (!_f.lextokv)
         {
           again = false;
@@ -139,8 +146,9 @@ Rps_TokenSource::parse_expression(Rps_CallFrame*callframe, std::deque<Rps_Value>
     {
       _f.disjv = disjvect[0];
     }
-  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_expression gives "
-                << _f.disjv << " token_deq:" << token_deq);
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_expression returns "
+                << _f.disjv << " token_deq:" << token_deq
+                << " startpos:"<< startpos << " endingpos:" << position_str());
   return _f.disjv;
 } // end Rps_TokenSource::parse_expression
 
@@ -183,6 +191,7 @@ Rps_TokenSource::parse_disjunction(Rps_CallFrame*callframe, std::deque<Rps_Value
   _f.lextokv =  lookahead_token(&_, token_deq, 0);
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction lextokv="
                 << _f.lextokv
+                << " startpos:" << startpos
                 << " position: "
                 << position_str()
                 << " token_deq:" << token_deq);
@@ -197,8 +206,13 @@ Rps_TokenSource::parse_disjunction(Rps_CallFrame*callframe, std::deque<Rps_Value
     {
       if (pokparse)
         *pokparse = false;
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction failed left conjunction token_deq:" << token_deq << " startpos:" << startpos
+                    << " position:" position_str());
       return nullptr;
     }
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction leftv=" << _f.leftv
+                " token_deq:" << token_deq << " startpos:" << startpos
+                << " position:" position_str());
   conjvect.push_back(_f.leftv);
   bool again = false;
   static Rps_Id idanddelim;
@@ -995,7 +1009,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
           if (pokparse)
             *pokparse = true;
           RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv
-			<< " token_deq:" << token_deq);
+                        << " token_deq:" << token_deq);
           return _f.lexvalv;
         }
       RPS_WARNOUT("unimplemented object token kind " << _f.lexkindob
