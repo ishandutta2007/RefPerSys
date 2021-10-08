@@ -207,7 +207,7 @@ Rps_TokenSource::parse_disjunction(Rps_CallFrame*callframe, std::deque<Rps_Value
       if (pokparse)
         *pokparse = false;
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction failed left conjunction token_deq:" << token_deq << " startpos:" << startpos
-                    << " position:" position_str());
+                    << " position:" << position_str());
       return nullptr;
     }
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction leftv=" << _f.leftv
