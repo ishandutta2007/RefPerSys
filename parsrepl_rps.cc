@@ -475,9 +475,9 @@ Rps_TokenSource::parse_comparison(Rps_CallFrame*callframe, std::deque<Rps_Value>
 #warning unimplemented Rps_TokenSource::parse_comparison
   RPS_FATALOUT("missing code in Rps_TokenSource::parse_comparison "
                << " with token_deq=" << token_deq
-	       << std::endl << "... startpos:" << startpos << " at " << position_str()
+               << std::endl << "... startpos:" << startpos << " at " << position_str()
                << " lextokv:" << _f.lextokv
-	       << " leftv:" << _f.leftv << std::endl << "...from " << Rps_ShowCallFrame(callframe));
+               << " leftv:" << _f.leftv << std::endl << "...from " << Rps_ShowCallFrame(callframe));
 } // end Rps_TokenSource::parse_comparison
 
 

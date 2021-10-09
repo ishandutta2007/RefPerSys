@@ -385,7 +385,8 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
           _f.res = Rps_LexTokenValue(lextokz);
           lextokz->set_serial(++toksrc_counter);
           RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                        << " object :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
+                        << " object :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno
+                        << std::endl);
           return _f.res;
         }
       else if (isalpha(namestr[0]))  // new symbol
@@ -400,7 +401,8 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
           _f.res = Rps_LexTokenValue(lextok);
           lextok->set_serial(++toksrc_counter);
           RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                        << " symbol :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
+                        << " symbol :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno
+                        << std::endl);
           return _f.res;
         }
       else   // bad name
@@ -428,7 +430,8 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " single-line string :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
+                    << " single-line string :-◑> " << _f.res << " @! " << position_str()
+                    << " from " << file << ":" << lineno << std::endl);
       return _f.res;
     } // end single-line literal string token
 
@@ -452,7 +455,9 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " multi-line literal string :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
+                    << " multi-line literal string :-◑> " << _f.res
+                    << " @! " << position_str() << " from " << file << ":" << lineno
+                    << std::endl);
       return _f.res;
     } // end possibly multi-line raw literal strings
 
@@ -516,7 +521,8 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " code_chunk :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
+                    << " code_chunk :-◑> " << _f.res << " @! " << position_str() << " from "
+                    << file << ":" << lineno << std::endl);
       return _f.res;
     } // end lexing code chunk
 
@@ -540,7 +546,8 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
         }
       toksrc_counter++;
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " delimiter :-◑> " << _f.delimv << " at " << position_str() << " from " << file << ":" << lineno);
+                    << " delimiter :-◑> " << _f.delimv << " at " << position_str()
+                    << " from " << file << ":" << lineno << std::endl);
       return _f.delimv;
     }
 #warning Rps_TokenSource::get_token unimplemented
@@ -633,7 +640,7 @@ Rps_TokenSource::get_delimiter(Rps_CallFrame*callframe)
              toksrc_line, startcol);
           lextok->set_serial(++toksrc_counter);
           _f.res = Rps_LexTokenValue(lextok);
-          RPS_DEBUG_LOG(REPL, "get_delimiter delimiter :-◑> " << _f.res << " at " << position_str()
+          RPS_DEBUG_LOG(REPL, "get_delimiter delimiter :-⬟> " << _f.res << " at " << position_str()
                         << " at " << startpos << std::endl
                         << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::get_delimiter"));
           return _f.res;
@@ -953,7 +960,7 @@ Rps_TokenSource::lex_code_chunk(Rps_CallFrame*callframe)
     }
   while (_f.chunkelemv || toksrc_col>oldcol || toksrc_line>oldline);
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lex_code_chunk "
-                << " :-◑> obchunk=" << _f.obchunk << " @!" << position_str());
+                << " :-⬗> obchunk=" << _f.obchunk << " @!" << position_str());
   return _f.obchunk;
 } // end of Rps_TokenSource::lex_code_chunk
 
