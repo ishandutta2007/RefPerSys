@@ -256,11 +256,13 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
                            Rps_Value delimv;
                            Rps_ObjectRef obdelim;
                 );
+  if (!file)
+    file = "???";
   const char* curp = curcptr();
   if (curp)
     RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start curp='" << Rps_Cjson_String(curp) << "' at " << position_str() << " from " << (file?file:"???") << ":" << lineno);
   else
-    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start no curp at " << position_str()<< " from " << (file?file:"???") << ":" << lineno);
+    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start no curp at " << position_str()<< " from " << file << ":" << lineno);
 
   ucs4_t curuc=0;
   int ulen= -1;
@@ -282,8 +284,9 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
     RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token no curp at " << position_str());
   if (toksrc_col>=(int)linelen)
     {
-      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token :-◑! fail at " << position_str());
-    return nullptr;
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token :-◑! fail at " << position_str()
+                    << " from " << file << ":" << lineno);
+      return nullptr;
     }
   ulen=curp?u8_strmbtouc(&curuc, (const uint8_t*)curp):0; // length in bytes
   /// lex numbers?
@@ -319,7 +322,8 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
          curlin, curcol);
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
-      RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter << " number :-◑> " << _f.res << " @! " << position_str());
+      RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter << " number :-◑> " << _f.res << " @! " << position_str()
+                    << " from " << file << ":" << lineno);
       return _f.res;
     } //- end lexing numbers
   ///
@@ -347,7 +351,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    <<" infinity :-◑> " << _f.res << " @! " << position_str());
+                    <<" infinity :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
       return _f.res;
     } //- end lexing infinities
 
@@ -381,7 +385,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
           _f.res = Rps_LexTokenValue(lextokz);
           lextokz->set_serial(++toksrc_counter);
           RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                        << " object :-◑> " << _f.res << " @! " << position_str());
+                        << " object :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
           return _f.res;
         }
       else if (isalpha(namestr[0]))  // new symbol
@@ -396,7 +400,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
           _f.res = Rps_LexTokenValue(lextok);
           lextok->set_serial(++toksrc_counter);
           RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                        << " symbol :-◑> " << _f.res << " @! " << position_str());
+                        << " symbol :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
           return _f.res;
         }
       else   // bad name
@@ -424,7 +428,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " single-line string :-◑> " << _f.res << " @! " << position_str());
+                    << " single-line string :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
       return _f.res;
     } // end single-line literal string token
 
@@ -448,7 +452,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " multi-line literal string :-◑> " << _f.res << " @! " << position_str());
+                    << " multi-line literal string :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
       return _f.res;
     } // end possibly multi-line raw literal strings
 
@@ -512,7 +516,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
       _f.res = Rps_LexTokenValue(lextok);
       lextok->set_serial(++toksrc_counter);
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " code_chunk :-◑> " << _f.res << " @! " << position_str());
+                    << " code_chunk :-◑> " << _f.res << " @! " << position_str() << " from " << file << ":" << lineno);
       return _f.res;
     } // end lexing code chunk
 
@@ -536,7 +540,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
         }
       toksrc_counter++;
       RPS_DEBUG_LOG(REPL, "get_token#" << toksrc_counter
-                    << " delimiter :-◑> " << _f.delimv << " at " << position_str());
+                    << " delimiter :-◑> " << _f.delimv << " at " << position_str() << " from " << file << ":" << lineno);
       return _f.delimv;
     }
 #warning Rps_TokenSource::get_token unimplemented
