@@ -473,9 +473,11 @@ Rps_TokenSource::parse_comparison(Rps_CallFrame*callframe, std::deque<Rps_Value>
       return _f.leftv;
     }
 #warning unimplemented Rps_TokenSource::parse_comparison
-  RPS_FATALOUT("missing code in Rps_TokenSource::parse_comparison from " << Rps_ShowCallFrame(callframe)
-               << " with token_deq=" << token_deq << " at " << position_str()
-               << " lextokv:" << _f.lextokv);
+  RPS_FATALOUT("missing code in Rps_TokenSource::parse_comparison "
+               << " with token_deq=" << token_deq
+	       << std::endl << "... startpos:" << startpos << " at " << position_str()
+               << " lextokv:" << _f.lextokv
+	       << " leftv:" << _f.leftv << std::endl << "...from " << Rps_ShowCallFrame(callframe));
 } // end Rps_TokenSource::parse_comparison
 
 
@@ -862,6 +864,7 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term singleoperand result " << operandvect[0] << " token_deq:" << token_deq);
       return operandvect[0];
     }
+  RPS_ASSERT(operandvect.size() > 1);
 #warning unimplemented Rps_TokenSource::parse_term
   /* we probably should make a term with operandvect here ... */
   RPS_FATALOUT("missing code in Rps_TokenSource::parse_term from " << Rps_ShowCallFrame(callframe)
@@ -1044,6 +1047,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
                << " position_str:" << position_str()
                << " startpos:" << startpos);
 } // end Rps_TokenSource::parse_primary
+
 
 Rps_Value
 Rps_TokenSource::parse_primary_complement(Rps_CallFrame*callframe, std::deque<Rps_Value>& token_deq, Rps_Value primaryexparg, bool*pokparse)
