@@ -281,7 +281,10 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
   else
     RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token no curp at " << position_str());
   if (toksrc_col>=(int)linelen)
+    {
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token :-◑! fail at " << position_str());
     return nullptr;
+    }
   ulen=curp?u8_strmbtouc(&curuc, (const uint8_t*)curp):0; // length in bytes
   /// lex numbers?
   if (isdigit(*curp) ||
