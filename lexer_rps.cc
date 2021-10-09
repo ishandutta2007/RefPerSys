@@ -1156,7 +1156,8 @@ Rps_TokenSource::lookahead_token(Rps_CallFrame*callframe, std::deque<Rps_Value>&
       else
         {
           RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lookahead_token rank#" << rank << " missing from:"
-                        << std::endl << Rps_ShowCallFrame(&_));
+                        << std::endl
+                        << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::lookahead_token EOF"));
           return nullptr;
         }
     };
@@ -1166,7 +1167,7 @@ Rps_TokenSource::lookahead_token(Rps_CallFrame*callframe, std::deque<Rps_Value>&
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lookahead_token rank#" << rank << " => " << _f.lextokv);
       return _f.lextokv;
     }
-  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lookahead_token rank#" << rank << " missing:"
+  RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lookahead_token rank#" << rank << " missing near " << position_str()
                 << std::endl << Rps_ShowCallFrame(&_));
   return nullptr;
 } // end Rps_TokenSource::lookahead_token

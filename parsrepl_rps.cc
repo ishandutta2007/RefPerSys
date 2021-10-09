@@ -211,8 +211,8 @@ Rps_TokenSource::parse_disjunction(Rps_CallFrame*callframe, std::deque<Rps_Value
       return nullptr;
     }
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_disjunction leftv=" << _f.leftv
-                " token_deq:" << token_deq << " startpos:" << startpos
-                << " position:" position_str());
+                << " token_deq:" << token_deq << " startpos:" << startpos
+                << " position:" << position_str());
   conjvect.push_back(_f.leftv);
   bool again = false;
   static Rps_Id idanddelim;
