@@ -764,8 +764,10 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
       _f.lextokv = RPS_GET_TOKEN(*this,&_);
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term got token after leftv=" << _f.leftv << " got lextok=" << _f.lextokv
                     << " lexopertokv=" << _f.lexopertokv
-                    << " @! " << position_str()
+                    << std::endl
+                    << "... curpos: " << position_str()
                     << " curcptr " << Rps_QuotedC_String(curcptr())
+		    << " token_deq:" << token_deq
                     << std::endl << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_term after-left"));
       if (!_f.lextokv)
         break;
