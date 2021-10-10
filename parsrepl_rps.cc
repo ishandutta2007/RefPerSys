@@ -588,7 +588,7 @@ Rps_TokenSource::parse_factor(Rps_CallFrame*callframe, std::deque<Rps_Value>& to
                 << " with token_deq=" << token_deq << " at " <<  startpos);
   bool okleft = false;
 #warning Rps_TokenSource::parse_factor should probably use parse_primary here
-  _f.leftv = parse_term(&_, token_deq, &okleft);
+  _f.leftv = parse_primary(&_, token_deq, &okleft);
   if (okleft)
     {
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_factor leftv=" << _f.leftv << " startpos:" << startpos);
@@ -624,7 +624,7 @@ Rps_TokenSource::parse_factor(Rps_CallFrame*callframe, std::deque<Rps_Value>& to
                     << " with token_deq=" << token_deq << " at "
                     <<  startpos << " binoperob=" << _f.binoperob);
       RPS_ASSERT(_f.lexgotokv  == _f.lextokv);
-      _f.rightv = parse_term(&_, token_deq, &okright);
+      _f.rightv = parse_primary(&_, token_deq, &okright);
       if (!okright)
         {
           RPS_WARNOUT("parse_factor failed to parse right term starting " << startpos << " at " << position_str() << " token_deq:" << token_deq);
