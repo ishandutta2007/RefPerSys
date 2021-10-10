@@ -767,7 +767,7 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
                     << std::endl
                     << "... curpos: " << position_str()
                     << " curcptr " << Rps_QuotedC_String(curcptr())
-		    << " token_deq:" << token_deq
+                    << " token_deq:" << token_deq
                     << std::endl << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_term after-left"));
       if (!_f.lextokv)
         break;
@@ -939,11 +939,6 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
       _f.lexgotokv = RPS_GET_TOKEN(*this, &_);
       if (pokparse)
         *pokparse = true;
-      if (_f.lexgotokv)
-        {
-          RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary tokenpush " << _f.lexgotokv);
-          token_deq.push_back(_f.lexgotokv);
-        }
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary string " << _f.lexvalv
                     << " token_deq:" << token_deq
                     << " lexgotokv:" << _f.lexgotokv
@@ -956,11 +951,6 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
       _f.lexgotokv = RPS_GET_TOKEN(*this, &_);
       if (pokparse)
         *pokparse = true;
-      if (_f.lexgotokv)
-        {
-          RPS_DEBUG_LOG(CMD, "Rps_TokenSource::parse_primary tokenpush " << _f.lextokv);
-          token_deq.push_back(_f.lexgotokv);
-        }
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary double " << _f.lexvalv << " lexgotokv:" << _f.lexgotokv
                     << " token_deq:" << token_deq
                     << " at " << position_str());
@@ -992,6 +982,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
             {
               if (pokparse)
                 *pokparse = true;
+              (void) RPS_GET_TOKEN(*this, &_);
               return _f.lexvalv;
             }
         }
@@ -1013,6 +1004,7 @@ Rps_TokenSource::parse_primary(Rps_CallFrame*callframe, std::deque<Rps_Value>& t
         {
           if (pokparse)
             *pokparse = true;
+          (void) RPS_GET_TOKEN(*this, &_);
           RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_primary/object result " << _f.lexvalv
                         << " token_deq:" << token_deq);
           return _f.lexvalv;
