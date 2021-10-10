@@ -219,9 +219,9 @@ rpsapply_7WsQyJK6lty02uz5KT(Rps_CallFrame*callerframe,
   _f.replcmdob = arg0.to_object();
   _f.lextokv = arg1;
   RPS_ASSERT(_.call_frame_depth() < 7);
-  RPS_DEBUG_LOG(CMD, "REPL command show framedepth=" << _.call_frame_depth()
-                << " lextokv=" << _f.lextokv
-                <<" curframe:"
+  RPS_DEBUG_LOG(CMD, "REPL command show framedepth=" << _.call_frame_depth() << " replcmdob:" << _f.replcmdob
+                << " lextokv=" << _f.lextokv << " token_deq:" << token_deq
+                << " curframe:"
                 << std::endl << Rps_ShowCallFrame(&_)
                 << RPS_FULL_BACKTRACE_HERE(1, "REPL command show rpsapply_7WsQyJK6lty02uz5KT"));
   const Rps_LexTokenZone* ltokz = _f.lextokv.to_lextoken();
@@ -235,7 +235,7 @@ rpsapply_7WsQyJK6lty02uz5KT(Rps_CallFrame*callerframe,
                   << " before parse_expression");
     _f.lextokv = RPS_GET_TOKEN(*tksrc,&_);
     RPS_DEBUG_LOG(CMD, "REPL command show got lextokv=" << _f.lextokv
-                  << " from " << RPS_FULL_BACKTRACE_HERE(1, "REPL command show rpsapply_7WsQyJK6lty02uz5KT/gotnext"));
+                  << std::endl << RPS_FULL_BACKTRACE_HERE(1, "REPL command show rpsapply_7WsQyJK6lty02uz5KT/gotnext"));
     if (_f.lextokv)
       {
         RPS_DEBUG_LOG(CMD, "REPL command show tokenpush " << _f.lextokv);
