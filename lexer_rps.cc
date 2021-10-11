@@ -260,7 +260,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
     file = "???";
   const char* curp = curcptr();
   if (curp)
-    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start curp='" << Rps_Cjson_String(curp) << "' at " << position_str() << " from " << (file?file:"???") << ":" << lineno);
+    RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start curp='" << Rps_Cjson_String(curp) << "' at " << position_str() << " from " << file << ":" << lineno);
   else
     RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token start no curp at " << position_str()<< " from " << file << ":" << lineno);
 
@@ -273,7 +273,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
     {
       std::ostringstream errout;
       errout << "bad UTF-8 encoding in " << toksrc_name << ":L" << toksrc_line << ",C" << toksrc_col << std::flush;
-      RPS_WARNOUT("Rps_TokenSource::get_token: " << errout.str());
+      RPS_WARNOUT("Rps_TokenSource::get_token: " << errout.str() << " from " << file << ":" << lineno);
       throw std::runtime_error(errout.str());
     }
   while (curp && isspace(*curp) && toksrc_col<(int)linelen)
@@ -284,7 +284,7 @@ Rps_TokenSource::get_token(Rps_CallFrame*callframe, const char*file, int lineno)
     RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token no curp at " << position_str());
   if (toksrc_col>=(int)linelen)
     {
-      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token :-◑! fail at " << position_str()
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::get_token :-◑! NULL at " << position_str()
                     << " from " << file << ":" << lineno);
       return nullptr;
     }
