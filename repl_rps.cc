@@ -276,7 +276,7 @@ rps_repl_interpret_token_source(Rps_CallFrame*callframe, Rps_TokenSource& toksou
         std::string commandpos = toksource.position_str();
         try
           {
-            _f.lextokenv = RPS_GET_TOKEN(toksource, &_);
+            _f.lextokenv = RPS_GET_TOKEN(toksource, &_, nullptr);
             RPS_DEBUG_LOG(REPL, "rps_repl_interpret_token_source commandpos:" << commandpos << " lextokenv=" << _f.lextokenv
                           << " currentpos:" << toksource.position_str());
             if (!_f.lextokenv)
@@ -1696,7 +1696,7 @@ rps_read_eval_print_loop(int &argc, char **argv)
                     << " commandpos=" << commandpos
                     << " current_line='"
                     << Rps_Cjson_String(rltoksrc.current_line()) << "'");
-      _f.lextokv = RPS_GET_TOKEN(rltoksrc, &_);
+      _f.lextokv = RPS_GET_TOKEN(rltoksrc, &_,  nullptr);
       RPS_DEBUG_LOG(REPL, "rps_read_eval_print_loop got lextokv=" << _f.lextokv << " pos=" << rltoksrc.position_str());
       if (!_f.lextokv)
         break;
@@ -1820,7 +1820,7 @@ rps_do_repl_commands_vec(const std::vector<std::string>&cmdvec)
         RPS_DEBUG_LOG(REPL, "rps_do_repl_commands_vec command#" << cix
                       << Rps_Cjson_String(cmdvec[cix])
                       << " @" << bufpath);
-        _f.lextokv = RPS_GET_TOKEN(intoksrc,&_);
+        _f.lextokv = RPS_GET_TOKEN(intoksrc,&_,nullptr);
         _f.lexval = nullptr;
         _f.cmdob = nullptr;
         RPS_DEBUG_LOG(REPL, "rps_do_repl_commands_vec got lextokv=" << _f.lextokv << " pos=" << intoksrc.position_str());

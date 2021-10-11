@@ -2283,7 +2283,7 @@ public:
   Rps_LexTokenValue get_token(Rps_CallFrame*callframe, const char*file=nullptr, int lineno=0);
 };				// end Rps_TokenSource
 
-#define RPS_GET_TOKEN(TokSrc,CallFrame) (TokSrc).get_token(CallFrame,__FILE__,__LINE__)
+#define RPS_GET_TOKEN(TokSrc,CallFrame,PTokQue) (((void)(PTokQue)), (TokSrc).get_token(CallFrame,__FILE__,__LINE__))
 
 class Rps_CinTokenSource : public Rps_TokenSource
 {
