@@ -435,7 +435,6 @@ enum rps_progoption_en
   RPSPROGOPT_DUMP='D',
   RPSPROGOPT_COMMAND='c',
   RPSPROGOPT_QT='Q',
-  RPSPROGOPT_WEB='W',
 
   RPSPROGOPT_HOMEDIR=1000,
   RPSPROGOPT_RANDOMOID,
@@ -1353,6 +1352,10 @@ static_assert(sizeof(Rps_Value) == sizeof(void*),
 static_assert(alignof(Rps_Value) == alignof(void*),
               "Rps_Value should have the alignment of a word");
 
+
+/// get the C++ ostream pointer. Usually to write HTML stuff.
+extern "C" std::ostream*
+rps_web_ostream_ptr(Rps_CallFrame*callframe, Rps_ObjectRef obarg, bool check);
 
 ////////////////////////////////////////////////////////////////
 //// utility class to output a value with a given depth to some std::ostream

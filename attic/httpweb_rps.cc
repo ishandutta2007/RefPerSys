@@ -1455,7 +1455,7 @@ rps_serve_onion_expanded_stream(Rps_CallFrame*callframe, Rps_Value valarg,
 #warning maybe partly unimplemented rps_serve_onion_expanded_stream
 } // end rps_serve_onion_expanded_stream
 
-
+#if 0 /// old code, moved to main_rps.cc
 /// get the C++ ostream pointer. Usually to write HTML stuff.
 std::ostream*
 rps_web_ostream_ptr(Rps_CallFrame*callframe, Rps_ObjectRef obarg, bool check)
@@ -1528,7 +1528,7 @@ rps_web_ostream_ptr(Rps_CallFrame*callframe, Rps_ObjectRef obarg, bool check)
     }
   return nullptr;
 } // end rps_web_ostream_ptr
-
+#endif
 
 
 void

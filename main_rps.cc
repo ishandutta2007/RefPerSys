@@ -32,7 +32,7 @@
  ******************************************************************************/
 
 #include "refpersys.hh"
-#include "onion/version.h"
+#include "json/version.h" // from jsoncpp
 #include "readline/readline.h"
 
 //// ugly, but temporarily needed near commit 8506e5955bc59d (july 2021)
@@ -85,8 +85,6 @@ extern "C" std::vector<std::string> rps_command_vec;
 std::vector<std::string> rps_command_vec;
 
 
-#define RPS_DEFAULT_WEB_SERVICE "localhost:9090"
-const char*rps_web_service;
 
 error_t rps_parse1opt (int key, char *arg, struct argp_state *state);
 struct argp_option rps_progoptions[] =
@@ -228,15 +226,6 @@ struct argp_option rps_progoptions[] =
     /*flags:*/ 0, ///
     /*doc:*/ "Run the given REPL_COMMAND;\n"
     "Try the help command for details.", //
-    /*group:*/0 ///
-  },
-  /* ======= web interface  ======= */
-  {/*name:*/ "web", ///
-    /*key:*/ RPSPROGOPT_WEB, ///
-    /*arg:*/ "HOST:PORT", ///
-    /*flags:*/ 0, ///
-    /*doc:*/ "start web service as given on HOST:PORT,"
-    " where -W. means --web=http:" RPS_DEFAULT_WEB_HOST_PORT, //
     /*group:*/0 ///
   },
   /* ======= edit the C++ code of  a temporary plugin after load ======= */
@@ -972,17 +961,6 @@ rps_parse1opt (int key, char *arg, struct argp_state *state)
       rps_run_command_after_load = arg;
     }
     return 0;
-    case RPSPROGOPT_WEB:
-    {
-      if (side_effect && arg)
-        {
-          if (!strcmp(arg, "."))
-            rps_web_service = RPS_DEFAULT_WEB_SERVICE;
-          else
-            rps_web_service = arg;
-        }
-    }
-    return 0;
     case RPSPROGOPT_PLUGIN_AFTER_LOAD:
     {
       void* dlh = dlopen(arg, RTLD_NOW|RTLD_GLOBAL);
@@ -1056,7 +1034,7 @@ rps_parse1opt (int key, char *arg, struct argp_state *state)
                     << " parser generator: " << rps_gnubison_version << std::endl
                     << " Read Eval Print Loop: " << rps_repl_version() << std::endl
                     << " libCURL for web client: " << rps_curl_version() << std::endl
-                    << " Libonion web server library version: " << onion_version() << std::endl
+		    << " libjsoncpp " JSONCPP_VERSION_STRING << std::endl
                     << " made with: " << rps_makefile << std::endl
                     << " running on " << rps_hostname();
           {
@@ -1262,15 +1240,6 @@ rps_run_application(int &argc, char **argv)
       RPS_DEBUG_LOG(GUI, "after running rps_tempgui_run@" << (void*)qtrun << std::endl
                     << RPS_FULL_BACKTRACE_HERE(1, "rps_run_application after rps_tempgui_run"));
     }
-  else if (rps_web_service)
-    {
-      usleep(100000);
-      RPS_DEBUG_LOG(WEB, "rps_web_service: " << rps_web_service);
-#warning rps_run_web_service from rps_run_web_service might not work
-      rps_web_initialize_service(rps_web_service);
-      usleep(10000);
-      rps_run_web_service();
-    }
   else
     {
       RPS_WARNOUT("rps_run_application incomplete"
@@ -1281,6 +1250,73 @@ rps_run_application(int &argc, char **argv)
   RPS_WARNOUT("incomplete rps_run_application " << std::endl
               << RPS_FULL_BACKTRACE_HERE(1, "rps_run_application"));
 } // end rps_run_application
+
+
+/// get the C++ ostream pointer. Usually to write HTML stuff.
+std::ostream*
+rps_web_ostream_ptr(Rps_CallFrame*callframe, Rps_ObjectRef obarg, bool check)
+{
+  RPS_LOCALFRAME(/*descr:*/ nullptr,
+                            /*prev:*/callframe,
+                            /*locals:*/
+                            Rps_ObjectRef ob;
+                            Rps_ObjectRef obclass);
+  _f.ob = obarg;
+  RPS_DEBUGNL_LOG(WEB, "rps_web_ostream_ptr start ob=" << _f.ob
+                  << " callframe:" << Rps_ShowCallFrame(&_));
+  if (!_f.ob)
+    {
+      RPS_DEBUG_LOG(WEB, "rps_web_ostream_ptr empty ob");
+      if (check)
+        throw std::runtime_error("rps_web_ostream_ptr empty ob");
+      return nullptr;
+    };
+  std::lock_guard<std::recursive_mutex> gu(*_f.ob->objmtxptr());
+  _f.obclass = _f.ob->compute_class(&_);
+  RPS_DEBUG_LOG(WEB, "rps_web_ostream_ptr ob=" << _f.ob
+                << " of class:" << _f.obclass);
+  auto web_exchange_ob = RPS_ROOT_OB(_8zNtuRpzXUP013WG9S);//web_exchange∈class
+  auto string_buffer_ob = RPS_ROOT_OB(_7Y3AyF9gNx700bQJXc); //string_buffer∈class
+  int loopcnt = 0;
+  /// we loop on the class, its super class etc....
+  while (_f.obclass)
+    {
+      /// stop the loop if object class is reached
+      if (_f.obclass == RPS_ROOT_OB(_5yhJGgxLwLp00X0xEQ) //object∈class
+         )
+        break;
+      /// Just in case, count the loops and avoid looping
+      /// indefinitely, which could happen only if the heap is
+      /// severely corrupted...
+      loopcnt++;
+      RPS_ASSERT(loopcnt < 64);
+      ///
+       if (_f.obclass == string_buffer_ob)
+        {
+          Rps_PayloadStrBuf* paylstrbuf =  _f.ob->get_dynamic_payload<Rps_PayloadStrBuf>();
+          RPS_ASSERT(paylstrbuf != nullptr);
+          RPS_DEBUG_LOG(WEB, "rps_web_ostream_ptr ob=" << _f.ob << " good string buffer");
+          return paylstrbuf->output_string_stream_ptr();
+        }
+      else
+        {
+          // replace _f.obclass by its superclass
+          std::lock_guard<std::recursive_mutex> guclass(*_f.obclass->objmtxptr());
+          Rps_PayloadClassInfo*paylclinfo = _f.obclass->get_classinfo_payload();
+          RPS_ASSERT(paylclinfo != nullptr);
+          _f.obclass = paylclinfo->superclass();
+          RPS_DEBUG_LOG(WEB, "rps_web_ostream_ptr ob=" << _f.ob << " peeking superclass " << _f.obclass);
+          continue;
+        }
+    };				// end while _f.obclass
+  if (check)
+    {
+      std::ostringstream errout;
+      errout << "rps_web_ostream_ptr bad ob " << _f.ob << std::flush;
+      throw std::runtime_error(errout.str());
+    }
+  return nullptr;
+} // end rps_web_ostream_ptr
 
 
 
