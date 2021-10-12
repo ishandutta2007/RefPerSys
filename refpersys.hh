@@ -2283,8 +2283,25 @@ public:
   Rps_LexTokenValue get_token(Rps_CallFrame*callframe, const char*file=nullptr, int lineno=0);
 };				// end Rps_TokenSource
 
-//#define RPS_GET_TOKEN(TokSrc,CallFrame,PTokQue) ((PTokQue && !(PTokQue->empty()))?(PTokQue->pop_front()):((TokSrc).get_token(CallFrame,__FILE__,__LINE__)))
-#define RPS_GET_TOKEN(TokSrc,CallFrame,PTokQue) (((void)(PTokQue)), (TokSrc).get_token(CallFrame,__FILE__,__LINE__))
+
+static inline Rps_Value
+rps_first_pop_deque_value(std::deque<Rps_Value>*pdeq)
+{
+  if (!pdeq)
+    return nullptr;
+  Rps_Value frontv = pdeq->front();
+  pdeq->pop_front();
+  return frontv;
+} // end rps_first_pop_deque_value
+
+#define RPS_GET_TOKEN_AT_BIS(Fil,Lin,TokSrc,CallFrame,PTokQue) \
+  ((PTokQue)?rps_first_pop_deque_value(PTokQue):((TokSrc).get_token(CallFrame,Fil,Lin)))
+#define RPS_GET_TOKEN_AT(Fil,Lin,TokSrc,CallFrame,PTokQue) \
+  RPS_GET_TOKEN_AT_BIS(Fil,Lin,TokSrc,CallFrame,PTokQue)
+#define RPS_GET_TOKEN(TokSrc,CallFrame,PTokQue) \
+  RPS_GET_TOKEN_AT(__FILE__,__LINE__,TokSrc,CallFrame,PTokQue)
+
+//#define RPS_GET_TOKEN(TokSrc,CallFrame,PTokQue) (((void)(PTokQue)), (TokSrc).get_token(CallFrame,__FILE__,__LINE__))
 
 class Rps_CinTokenSource : public Rps_TokenSource
 {
