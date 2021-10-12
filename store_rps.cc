@@ -560,7 +560,7 @@ Rps_Loader::parse_json_buffer_second_pass (Rps_Id spacid, unsigned lineno,
                      << ":: " << dlerror());
       obz->loader_put_magicattrgetter(this, reinterpret_cast<rps_magicgetterfun_t*>(funad));
     }
-  if (objjson.isMember("applying"))
+  if (objjson.isMember("applying") &&  objjson["applying"].asBool())
     {
       RPS_DEBUG_LOG(LOAD, "parse_json_buffer_second_pass applying objid=" << objid);
       std::lock_guard<std::recursive_mutex> gu(ld_mtx);

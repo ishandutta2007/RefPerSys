@@ -510,10 +510,6 @@
  "payload" : "setob",
  "setob" : 
  [
-  "_2sl5Gjb7swO04EcMqf",
-  "_5uPNoIZjxAw00VptvB",
-  "_5DZWF0ZGjIM00eyylS",
-  "_75D80xNEeeW007ERQI"
  ]
 }
 //-ob_14ZpYmyJrWY0327XLf
@@ -1069,7 +1065,6 @@
 //+ob_2sl5Gjb7swO04EcMqf
 //∈core_function
 {
- "applying" : true,
  "attrs" : 
  [
   {
@@ -2351,7 +2346,6 @@
 //+ob_5uPNoIZjxAw00VptvB
 //∈core_function
 {
- "applying" : true,
  "attrs" : 
  [
   {
@@ -2479,7 +2473,6 @@
 //+ob_5DZWF0ZGjIM00eyylS
 //∈core_function
 {
- "applying" : true,
  "attrs" : 
  [
   {
@@ -3115,7 +3108,7 @@
 //+ob_75D80xNEeeW007ERQI
 //∈core_function
 {
- "applying" : true,
+ "applying" : false,
  "attrs" : 
  [
   {
