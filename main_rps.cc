@@ -39,7 +39,7 @@
 //// see framalistes.org/sympa/arc/refpersys-forum/2021-07/msg00082.html
 #include <QApplication>
 #include <QtWidgets>
-
+#include <QtGlobal>
 
 
 extern "C" const char rps_main_gitid[];
@@ -1034,6 +1034,7 @@ rps_parse1opt (int key, char *arg, struct argp_state *state)
                     << " parser generator: " << rps_gnubison_version << std::endl
                     << " Read Eval Print Loop: " << rps_repl_version() << std::endl
                     << " libCURL for web client: " << rps_curl_version() << std::endl
+		    << " libQt version: " << qVersion() << std::endl
 		    << " libjsoncpp " JSONCPP_VERSION_STRING << std::endl
                     << " made with: " << rps_makefile << std::endl
                     << " running on " << rps_hostname();
