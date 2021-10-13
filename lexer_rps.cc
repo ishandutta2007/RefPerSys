@@ -1175,14 +1175,15 @@ Rps_TokenSource::lookahead_token(Rps_CallFrame*callframe, std::deque<Rps_Value>&
           return nullptr;
         }
     };
-  if (rank<token_deq.size())
+  if (rank >= 0 && rank<token_deq.size())
     {
       _f.lextokv = token_deq[rank];
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lookahead_token rank#" << rank << " => " << _f.lextokv);
       return _f.lextokv;
     }
   RPS_DEBUG_LOG(REPL, "Rps_TokenSource::lookahead_token rank#" << rank << " missing near " << position_str()
-                << std::endl << Rps_ShowCallFrame(&_));
+                << std::endl << Rps_ShowCallFrame(&_)
+                << std::endl << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::lookahead_token/missing"));
   return nullptr;
 } // end Rps_TokenSource::lookahead_token
 
