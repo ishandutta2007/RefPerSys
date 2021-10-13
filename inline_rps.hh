@@ -240,7 +240,10 @@ Rps_Value::output(std::ostream&out, unsigned depth) const
   else if (is_empty())
     out << "___";
   else if (is_ptr())
-    as_ptr()->val_output(out,depth);
+    {
+      auto vptr = as_ptr();
+      vptr->val_output(out,depth);
+    }
 } // end Rps_Value::output
 
 const void*
