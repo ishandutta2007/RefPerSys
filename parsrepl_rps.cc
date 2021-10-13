@@ -755,6 +755,11 @@ Rps_TokenSource::parse_term(Rps_CallFrame*callframe, std::deque<Rps_Value>& toke
                     << std::endl
                     << RPS_FULL_BACKTRACE_HERE(1, "Rps_TokenSource::parse_term after left"));
       _f.lexopertokv = lookahead_token(&_, token_deq, 1);
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term@@ after leftv=" << _f.leftv  << " pos:" << position_str());
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term@@ after lextokv=" << _f.lextokv);
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term@@ after lexopertokv=" << _f.lexopertokv);
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term@@ after token_deq=" << token_deq);
+      RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term@@ after curcptr=" << Rps_QuotedC_String(curcptr()));
       RPS_DEBUG_LOG(REPL, "Rps_TokenSource::parse_term after leftv=" << _f.leftv << " lextokv="
                     << _f.lextokv
                     << " lexopertokv=" << _f.lexopertokv
